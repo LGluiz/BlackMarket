@@ -1,61 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="/BlackMarket/">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baixe o Black Market</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f4f4f4;
+    }
 
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="mercadinho">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    h1 {
+      color: #333;
+    }
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+    p {
+      color: #666;
+    }
 
-  <title>mercadinho</title>
-  <link rel="manifest" href="manifest.json">
+    .store-buttons {
+      margin-top: 20px;
+    }
+
+    .store-buttons a {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .store-buttons a:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  <script>
+    // Função para detectar o sistema operacional e redirecionar
+    function detectPlatform() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+      // Verifica se é iOS
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        window.location.href = "https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone"; // Substitua pelo link da App Store
+      }
+      // Verifica se é Android
+      else if (/android/i.test(userAgent)) {
+        window.location.href = "https://play.google.com/store/apps/details?id=com.guilla.mercadinho"; // Substitua pelo link da Play Store
+      }
+      // Se não for iOS nem Android, mostra os botões
+      else {
+        document.getElementById("store-buttons").style.display = "block";
+      }
+    }
+
+    // Executa a função ao carregar a página
+    window.onload = detectPlatform;
+  </script>
 </head>
 
 <body>
-  <script src="flutter_bootstrap.js" async></script>
-  <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
+  <h1>Baixe o Black Market</h1>
+  <p>Escolha a sua plataforma para baixar o aplicativo:</p>
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyABbQOtiY5dIDnS5N91cp3EWRyAG8dbZNQ",
-      authDomain: "mercadinho-guilla.firebaseapp.com",
-      databaseURL: "https://mercadinho-guilla-default-rtdb.firebaseio.com",
-      projectId: "mercadinho-guilla",
-      storageBucket: "mercadinho-guilla.appspot.com",
-      messagingSenderId: "572032018831",
-      appId: "1:572032018831:web:9bc9a171d3fa44398d43fa"
-    };
+  <div id="store-buttons" class="store-buttons" style="display: none;">
+    <a href="https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone" target="_blank">Baixar na App
+      Store (iOS)</a>
+    <a href="https://play.google.com/store/apps/details?id=com.guilla.mercadinho" target="_blank">Baixar na Play Store
+      (Android)</a>
+  </div>
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-  </script>
+  <p>Se o redirecionamento automático não funcionar, clique nos botões acima.</p>
 </body>
 
 </html>
