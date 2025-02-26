@@ -1,25 +1,14 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.guilla.mercadinho",
-    "sha256_cert_fingerprints":
-    ["D8:C9:F5:8D:99:0E:21:46:AE:E8:7F:8F:D3:A3:BF:F2:6E:C8:F7:F4:E2:F2:B2:08:41:68:C8:11:2D:8C:5D:29"]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.guilla.mercadinho",
+      "sha256_cert_fingerprints": [
+        "D8:C9:F5:8D:99:0E:21:46:AE:E8:7F:8F:D3:A3:BF:F2:6E:C8:F7:F4:E2:F2:B2:08:41:68:C8:11:2D:8C:5D:29"
+      ]
+    }
   }
-},
-{
-  "relation": ["delegate_permission/common.get_login_creds"],
-  "target": {
-    "namespace": "web",
-    "site": "https://lgluiz.github.io"
-  }
-},
-{
-  "relation": ["delegate_permission/common.get_login_creds"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.guilla.mercadinho",
-    "sha256_cert_fingerprints":
-    ["D8:C9:F5:8D:99:0E:21:46:AE:E8:7F:8F:D3:A3:BF:F2:6E:C8:F7:F4:E2:F2:B2:08:41:68:C8:11:2D:8C:5D:29"]
-  }
-}]
+]
