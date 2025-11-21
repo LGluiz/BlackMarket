@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Minha Loja</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1100px;
+      margin: 20px auto;
+      padding: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    #busca {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 18px;
+      box-sizing: border-box;
+    }
+
+    #lista {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .produto {
+      background: #fff;
+      border: 1px solid #e1e1e1;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    }
+
+    .produto img {
+      width: 100%;
+      height: 140px;
+      object-fit: contain;
+      background: #fafafa;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .nome {
+      font-weight: 700;
+      font-size: 15px;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preco {
+      color: #0b8a42;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .empty {
+      text-align: center;
+      color: #666;
+      padding: 30px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Produtos</h1>
+  <input id="busca" placeholder="Buscar produto..." />
+
+  <div id="lista"></div>
+
+  <script>
+    (async function () {
+      // ======= CONFIGURE AQUI: URL DO SEU BACKEND (onde você deployou o server.js) =======
+      // Exemplo: const API_BASE = "https://minha-api.onrender.com";
+      const API_BASE = "https://mercadinho-guilla-default-rtdb.firebaseio.com";
+      // ================================================================================
+      const listaEl = document.getElementById('lista');
+      const buscaEl = document.getElementById('busca');
+      let produtos = [];
+
+      // imagem placeholder em SVG (não precisa de arquivo externo)
+      const placeholder = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#f5f5f5"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#bbb" font-size="20">Sem imagem</text></svg>`
+      );
+
+      async function carregar() {
+        try {
+          const res = await fetch(API_BASE + '/produto.json', { cache: 'no-store' });
+          if (!res.ok) throw new Error('Resposta do servidor: ' + res.status);
+          const data = await res.json();
+          // data é um objeto { id1: {...}, id2: {...} } -> transformar para array mantendo id
+          produtos = Object.entries(data || {}).map(([id, item]) => ({ id, ...item }));
+          render(produtos);
+        } catch (err) {
+          listaEl.innerHTML = `<div class="empty">Erro ao carregar produtos: ${err.message}</div>`;
+          console.error(err);
+        }
+      }
+
+      function formatMoney(v) {
+        const n = Number(v || 0);
+        return n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      function render(arr) {
+        if (!arr || arr.length === 0) {
+          listaEl.innerHTML = `<div class="empty">Nenhum produto encontrado.</div>`;
+          return;
+        }
+        listaEl.innerHTML = arr.map(p => {
+          const nome = (p.nome || '').trim() || 'Sem nome';
+          const preco = p.valor_venda != null ? formatMoney(p.valor_venda) : '0,00';
+          const img = p.url_img || p.img || placeholder;
+          // evita injeção simples (não insira HTML do usuário)
+          return `
+        <div class="produto" data-id="${String(p.id).replace(/"/g, '')}">
+          <img src="${img}" alt="${escapeHtml(nome)}" onerror="this.src='${placeholder}'" />
+          <div class="nome">${escapeHtml(nome)}</div>
+          <div class="preco">R$ ${preco}</div>
+        </div>
+      `;
+        }).join('');
+      }
+
+      function escapeHtml(s) {
+        return String(s || '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+      }
+
+      buscaEl.addEventListener('input', () => {
+        const term = buscaEl.value.toLowerCase();
+        const filtrado = produtos.filter(p => (p.nome || '').toLowerCase().includes(term));
+        render(filtrado);
+      });
+
+      // carrega ao abrir
+      await carregar();
+    })();
+  </script>
+</body>
+
+</html>
