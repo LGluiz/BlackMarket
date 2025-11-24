@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,7 +35,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -85,7 +86,7 @@
       padding: 12px;
       text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -144,7 +145,7 @@
       color: #fff;
       padding: 12px 20px;
       border-radius: 50px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       display: flex;
       align-items: center;
       gap: 15px;
@@ -157,15 +158,22 @@
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translate(-50%, 20px); }
-      to { opacity: 1; transform: translate(-50%, 0); }
+      from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
     }
 
     .banner-text {
       font-size: 14px;
       font-weight: 500;
     }
-    
+
     .banner-text span {
       display: block;
       font-size: 12px;
@@ -194,7 +202,8 @@
       background-color: #1d4ed8;
     }
 
-    #btn-ios, #btn-android {
+    #btn-ios,
+    #btn-android {
       display: none;
     }
 
@@ -202,13 +211,18 @@
       #lista {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       }
+
       .produto img {
         height: 180px;
       }
-      h1 { font-size: 2rem; }
+
+      h1 {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header>
@@ -228,10 +242,10 @@
       <span>Melhor experiência mobile</span>
     </div>
     <div class="store-buttons">
-      <a href="https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone" 
-         target="_blank" class="btn-store" id="btn-ios">App Store</a>
-      <a href="https://play.google.com/store/apps/details?id=com.guilla.mercadinho" 
-         target="_blank" class="btn-store" id="btn-android">Google Play</a>
+      <a href="https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone" target="_blank"
+        class="btn-store" id="btn-ios">App Store</a>
+      <a href="https://play.google.com/store/apps/details?id=com.guilla.mercadinho" target="_blank" class="btn-store"
+        id="btn-android">Google Play</a>
     </div>
   </div>
 
@@ -251,7 +265,20 @@
           const res = await fetch(API_BASE + '/produto.json', { cache: 'no-store' });
           if (!res.ok) throw new Error('Status: ' + res.status);
           const data = await res.json();
-          produtos = Object.entries(data || {}).map(([id, item]) => ({ id, ...item }));
+
+          // Transforma em array E ordena por nome
+          produtos = Object.entries(data || {})
+            .map(([id, item]) => ({ id, ...item }))
+            .sort((a, b) => {
+              // Usa toLowerCase para garantir que A e a fiquem juntos
+              // O operador || '' evita erro se o produto não tiver nome
+              const nomeA = (a.nome || '').toLowerCase();
+              const nomeB = (b.nome || '').toLowerCase();
+
+              // localeCompare é ideal para ordenar strings corretamente (incluindo acentos)
+              return nomeA.localeCompare(nomeB);
+            });
+
           render(produtos);
         } catch (err) {
           listaEl.innerHTML = `<div class="empty">Não foi possível carregar os produtos.<br><small>${err.message}</small></div>`;
@@ -297,12 +324,12 @@
       // Listener de busca atualizado com a normalização
       buscaEl.addEventListener('input', () => {
         const term = normalizeText(buscaEl.value);
-        
+
         const filtrado = produtos.filter(p => {
           const nomeProduto = normalizeText(p.nome);
           return nomeProduto.includes(term);
         });
-        
+
         render(filtrado);
       });
 
@@ -310,7 +337,7 @@
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const btnIos = document.getElementById('btn-ios');
       const btnAndroid = document.getElementById('btn-android');
-      
+
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
         btnIos.style.display = "inline-block";
       } else if (/android/i.test(userAgent)) {
@@ -327,4 +354,5 @@
     })();
   </script>
 </body>
+
 </html>
