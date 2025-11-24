@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,13 +7,11 @@
   <style>
     :root {
       --primary-color: #2563eb;
-      /* Azul moderno */
       --bg-color: #f3f4f6;
       --card-bg: #ffffff;
       --text-main: #1f2937;
       --text-secondary: #6b7280;
       --price-color: #059669;
-      /* Verde */
     }
 
     * {
@@ -28,7 +25,6 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       padding-bottom: 100px;
-      /* Espaço para o banner flutuante */
     }
 
     /* --- Cabeçalho Fixo --- */
@@ -38,7 +34,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -89,7 +85,7 @@
       padding: 12px;
       text-align: center;
       transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -121,7 +117,6 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       min-height: 40px;
-      /* Altura fixa para alinhar */
     }
 
     .preco {
@@ -129,7 +124,6 @@
       font-weight: 700;
       font-size: 1.1rem;
       margin-top: auto;
-      /* Empurra o preço para baixo */
     }
 
     .empty {
@@ -140,18 +134,17 @@
       font-size: 1.1rem;
     }
 
-    /* --- Banner Flutuante de Download --- */
+    /* --- Banner Flutuante --- */
     .app-banner {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       background-color: #111827;
-      /* Fundo escuro */
       color: #fff;
       padding: 12px 20px;
       border-radius: 50px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       display: flex;
       align-items: center;
       gap: 15px;
@@ -160,28 +153,19 @@
       max-width: 500px;
       justify-content: space-between;
       opacity: 0;
-      /* Começa invisível para animação */
       animation: slideUp 0.5s forwards 1s;
-      /* Aparece após 1s */
     }
 
     @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translate(-50%, 20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translate(-50%, 0);
-      }
+      from { opacity: 0; transform: translate(-50%, 20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
     }
 
     .banner-text {
       font-size: 14px;
       font-weight: 500;
     }
-
+    
     .banner-text span {
       display: block;
       font-size: 12px;
@@ -210,9 +194,7 @@
       background-color: #1d4ed8;
     }
 
-    /* Esconde botões por padrão, JS vai mostrar o correto */
-    #btn-ios,
-    #btn-android {
+    #btn-ios, #btn-android {
       display: none;
     }
 
@@ -220,18 +202,13 @@
       #lista {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       }
-
       .produto img {
         height: 180px;
       }
-
-      h1 {
-        font-size: 2rem;
-      }
+      h1 { font-size: 2rem; }
     }
   </style>
 </head>
-
 <body>
 
   <header>
@@ -251,19 +228,14 @@
       <span>Melhor experiência mobile</span>
     </div>
     <div class="store-buttons">
-      <a href="https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone" target="_blank"
-        class="btn-store" id="btn-ios">
-        App Store
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.guilla.mercadinho" target="_blank" class="btn-store"
-        id="btn-android">
-        Google Play
-      </a>
+      <a href="https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone" 
+         target="_blank" class="btn-store" id="btn-ios">App Store</a>
+      <a href="https://play.google.com/store/apps/details?id=com.guilla.mercadinho" 
+         target="_blank" class="btn-store" id="btn-android">Google Play</a>
     </div>
   </div>
 
   <script>
-    // ================= LOGICA DA LOJA (Produtos) =================
     (async function () {
       const API_BASE = "https://mercadinho-guilla-default-rtdb.firebaseio.com";
       const listaEl = document.getElementById('lista');
@@ -294,6 +266,14 @@
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       }
 
+      // Função auxiliar para remover acentos e colocar em minúsculo
+      function normalizeText(text) {
+        return String(text || '')
+          .normalize('NFD') // Separa acentos das letras (ex: 'ã' vira 'a' + '~')
+          .replace(/[\u0300-\u036f]/g, "") // Remove os caracteres de acento
+          .toLowerCase();
+      }
+
       function render(arr) {
         if (!arr || arr.length === 0) {
           listaEl.innerHTML = `<div class="empty">Nenhum produto encontrado.</div>`;
@@ -314,40 +294,37 @@
         }).join('');
       }
 
+      // Listener de busca atualizado com a normalização
       buscaEl.addEventListener('input', () => {
-        const term = buscaEl.value.toLowerCase();
-        render(produtos.filter(p => (p.nome || '').toLowerCase().includes(term)));
+        const term = normalizeText(buscaEl.value);
+        
+        const filtrado = produtos.filter(p => {
+          const nomeProduto = normalizeText(p.nome);
+          return nomeProduto.includes(term);
+        });
+        
+        render(filtrado);
       });
 
-      await carregar();
-    })();
-
-    // ================= LOGICA DO BANNER (Detectar OS) =================
-    (function detectPlatformForBanner() {
+      // Detectar Plataforma
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const btnIos = document.getElementById('btn-ios');
       const btnAndroid = document.getElementById('btn-android');
-
-      // Se for iOS, mostra botão iOS
+      
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
         btnIos.style.display = "inline-block";
-        btnAndroid.style.display = "none";
-      }
-      // Se for Android, mostra botão Android
-      else if (/android/i.test(userAgent)) {
+      } else if (/android/i.test(userAgent)) {
         btnAndroid.style.display = "inline-block";
-        btnIos.style.display = "none";
-      }
-      // Se for Desktop ou outro, mostra ambos (padrão para marketing)
-      else {
+      } else {
+        // Desktop: mostra ambos
         btnIos.style.display = "inline-block";
         btnAndroid.style.display = "inline-block";
-        // Ajuste visual para desktop: muda texto do botão para ser mais curto
         btnIos.textContent = "iOS";
         btnAndroid.textContent = "Android";
       }
+
+      await carregar();
     })();
   </script>
 </body>
-
 </html>
