@@ -280,7 +280,7 @@
           if (!res.ok) throw new Error('Status: ' + res.status);
           const data = await res.json();
           produtos = Object.entries(data || {}).map(([id, item]) => ({ id, ...item }));
-          render(produtos.filter(p => p.ativo));
+          render(produtos);
         } catch (err) {
           listaEl.innerHTML = `<div class="empty">Não foi possível carregar os produtos.<br><small>${err.message}</small></div>`;
         }
@@ -299,7 +299,7 @@
           listaEl.innerHTML = `<div class="empty">Nenhum produto encontrado.</div>`;
           return;
         }
-        listaEl.innerHTML = arr.map(p => {
+        listaEl.innerHTML = arr.filter(p => p.ativo).map(p => {
           const nome = (p.nome || '').trim() || 'Produto sem nome';
           const preco = p.valor_venda != null ? formatMoney(p.valor_venda) : '0,00';
           const img = p.url_img || p.img || placeholder;
