@@ -280,7 +280,7 @@
           if (!res.ok) throw new Error('Status: ' + res.status);
           const data = await res.json();
           produtos = Object.entries(data || {}).map(([id, item]) => ({ id, ...item }));
-          render(produtos);
+          render(produtos.filter(p => p.ativo));
         } catch (err) {
           listaEl.innerHTML = `<div class="empty">Não foi possível carregar os produtos.<br><small>${err.message}</small></div>`;
         }
