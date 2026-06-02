@@ -299,7 +299,7 @@
           listaEl.innerHTML = `<div class="empty">Nenhum produto encontrado.</div>`;
           return;
         }
-        listaEl.innerHTML = arr.filter(p => p.ativo).map(p => {
+        listaEl.innerHTML = arr.filter(p => p.ativo == true).map(p => {
           const nome = (p.nome || '').trim() || 'Produto sem nome';
           const preco = p.valor_venda != null ? formatMoney(p.valor_venda) : '0,00';
           const img = p.url_img || p.img || placeholder;
