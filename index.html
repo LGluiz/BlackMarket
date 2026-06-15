@@ -1,19 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Black Market - Produtos</title>
   <style>
+    /* ================= TEMAS (Claro/Escuro) ================= */
     :root {
+      /* Cores Padrão (Light Mode) */
       --primary-color: #2563eb;
-      /* Azul moderno */
       --bg-color: #f3f4f6;
       --card-bg: #ffffff;
       --text-main: #1f2937;
       --text-secondary: #6b7280;
       --price-color: #059669;
-      /* Verde */
+      --header-bg: #ffffff;
+      --input-bg: #f9fafb;
+      --input-border: #e5e7eb;
+      --shadow-color: rgba(0, 0, 0, 0.05);
+      --banner-bg: #111827;
+      --banner-text: #ffffff;
+    }
+
+    /* Detecta automaticamente se o sistema é DARK */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-color: #3b82f6;
+        /* Azul mais claro para contraste */
+        --bg-color: #111827;
+        /* Fundo muito escuro */
+        --card-bg: #1f2937;
+        /* Cinza escuro para cards */
+        --text-main: #f9fafb;
+        /* Texto quase branco */
+        --text-secondary: #9ca3af;
+        --price-color: #34d399;
+        /* Verde claro */
+        --header-bg: #1f2937;
+        --input-bg: #374151;
+        --input-border: #4b5563;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+        --banner-bg: #000000;
+        --banner-text: #ffffff;
+      }
     }
 
     * {
@@ -27,26 +57,28 @@
       background-color: var(--bg-color);
       color: var(--text-main);
       padding-bottom: 100px;
-      /* Espaço para o banner flutuante */
+      transition: background-color 0.3s, color 0.3s;
+      /* Transição suave */
     }
 
     /* --- Cabeçalho Fixo --- */
     header {
-      background: var(--card-bg);
+      background: var(--header-bg);
       padding: 15px 20px;
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 10px var(--shadow-color);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 10px;
+      transition: background-color 0.3s;
     }
 
     h1 {
       font-size: 1.5rem;
-      color: #111;
+      color: var(--text-main);
     }
 
     #busca-container {
@@ -58,18 +90,18 @@
     #busca {
       width: 100%;
       padding: 12px 15px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--input-border);
       border-radius: 50px;
       font-size: 16px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      background-color: #f9fafb;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s;
+      background-color: var(--input-bg);
+      color: var(--text-main);
     }
 
     #busca:focus {
       border-color: var(--primary-color);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      background-color: #fff;
     }
 
     /* --- Grid de Produtos --- */
@@ -87,8 +119,8 @@
       border-radius: 12px;
       padding: 12px;
       text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+      box-shadow: 0 1px 3px var(--shadow-color);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -97,14 +129,15 @@
 
     .produto:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 15px -3px var(--shadow-color);
     }
 
     .produto img {
       width: 100%;
       height: 150px;
       object-fit: contain;
-      background: #f9fafb;
+      background: var(--bg-color);
+      /* Fundo da imagem adapta ao tema */
       border-radius: 8px;
       margin-bottom: 12px;
     }
@@ -120,7 +153,6 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       min-height: 40px;
-      /* Altura fixa para alinhar */
     }
 
     .preco {
@@ -128,7 +160,6 @@
       font-weight: 700;
       font-size: 1.1rem;
       margin-top: auto;
-      /* Empurra o preço para baixo */
     }
 
     .empty {
@@ -139,15 +170,14 @@
       font-size: 1.1rem;
     }
 
-    /* --- Banner Flutuante de Download --- */
+    /* --- Banner Flutuante --- */
     .app-banner {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: #111827;
-      /* Fundo escuro */
-      color: #fff;
+      background-color: var(--banner-bg);
+      color: var(--banner-text);
       padding: 12px 20px;
       border-radius: 50px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
@@ -159,9 +189,7 @@
       max-width: 500px;
       justify-content: space-between;
       opacity: 0;
-      /* Começa invisível para animação */
       animation: slideUp 0.5s forwards 1s;
-      /* Aparece após 1s */
     }
 
     @keyframes slideUp {
@@ -206,10 +234,9 @@
     }
 
     .btn-store:hover {
-      background-color: #1d4ed8;
+      filter: brightness(1.1);
     }
 
-    /* Esconde botões por padrão, JS vai mostrar o correto */
     #btn-ios,
     #btn-android {
       display: none;
@@ -251,26 +278,22 @@
     </div>
     <div class="store-buttons">
       <a href="https://apps.apple.com/br/app/black-market/id6741739612?platform=iphone" target="_blank"
-        class="btn-store" id="btn-ios">
-        App Store
-      </a>
+        class="btn-store" id="btn-ios">App Store</a>
       <a href="https://play.google.com/store/apps/details?id=com.guilla.mercadinho" target="_blank" class="btn-store"
-        id="btn-android">
-        Google Play
-      </a>
+        id="btn-android">Google Play</a>
     </div>
   </div>
 
   <script>
-    // ================= LOGICA DA LOJA (Produtos) =================
     (async function () {
       const API_BASE = "https://mercadinho-guilla-default-rtdb.firebaseio.com";
       const listaEl = document.getElementById('lista');
       const buscaEl = document.getElementById('busca');
       let produtos = [];
 
+      // SVG simples com fundo transparente para funcionar bem nos dois temas
       const placeholder = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-        `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#f3f4f6"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="20" font-family="sans-serif">Sem imagem</text></svg>`
+        `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#cccccc" fill-opacity="0.2"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#999" font-size="20" font-family="sans-serif">Sem imagem</text></svg>`
       );
 
       async function carregar() {
@@ -278,15 +301,15 @@
           const res = await fetch(API_BASE + '/produto.json', { cache: 'no-store' });
           if (!res.ok) throw new Error('Status: ' + res.status);
           const data = await res.json();
+
           produtos = Object.entries(data || {})
             .map(([id, item]) => ({ id, ...item }))
-            .filter(item => item.ativo !== false && item.ativo !== 'false');
-
-          produtos.sort((a, b) => {
-            const nomeA = (a.nome || '').trim().toLowerCase();
-            const nomeB = (b.nome || '').trim().toLowerCase();
-            return nomeA.localeCompare(nomeB, 'pt-BR');
-          });
+            .filter(item => item.ativo !== false && item.ativo !== 'false')
+            .sort((a, b) => {
+              const nomeA = (a.nome || '').toLowerCase();
+              const nomeB = (b.nome || '').toLowerCase();
+              return nomeA.localeCompare(nomeB);
+            });
 
           render(produtos);
         } catch (err) {
@@ -300,6 +323,13 @@
 
       function escapeHtml(s) {
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      }
+
+      function normalizeText(text) {
+        return String(text || '')
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase();
       }
 
       function render(arr) {
@@ -323,47 +353,16 @@
       }
 
       buscaEl.addEventListener('input', () => {
-        const removeAccents = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        const term = removeAccents(buscaEl.value).toLowerCase();
-        render(produtos.filter(p => removeAccents(p.nome).toLowerCase().includes(term)));
+        const term = normalizeText(buscaEl.value);
+        const filtrado = produtos.filter(p => normalizeText(p.nome).includes(term));
+        render(filtrado);
       });
-
-      await carregar();
-    })();
-
-    // ================= LOGICA DO BANNER (Detectar OS) =================
-    (function detectPlatformForBanner() {
-      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-      const btnIos = document.getElementById('btn-ios');
-      const btnAndroid = document.getElementById('btn-android');
-
-      // Se for iOS, mostra botão iOS
-      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-        btnIos.style.display = "inline-block";
-        btnAndroid.style.display = "none";
-      }
-      // Se for Android, mostra botão Android
-      else if (/android/i.test(userAgent)) {
-        btnAndroid.style.display = "inline-block";
-        btnIos.style.display = "none";
-      }
-      // Se for Desktop ou outro, mostra ambos (padrão para marketing)
-      else {
-        btnIos.style.display = "inline-block";
-        btnAndroid.style.display = "inline-block";
-        // Ajuste visual para desktop: muda texto do botão para ser mais curto
-        btnIos.textContent = "iOS";
-        btnAndroid.textContent = "Android";
-      }
-    })();
-  </script>
-</body>
 
       // Detectar Plataforma
       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
       const btnIos = document.getElementById('btn-ios');
       const btnAndroid = document.getElementById('btn-android');
-      
+
       if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
         btnIos.style.display = "inline-block";
       } else if (/android/i.test(userAgent)) {
@@ -379,4 +378,5 @@
     })();
   </script>
 </body>
+
 </html>
