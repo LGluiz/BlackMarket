@@ -279,7 +279,16 @@
           const res = await fetch(API_BASE + '/produto.json', { cache: 'no-store' });
           if (!res.ok) throw new Error('Status: ' + res.status);
           const data = await res.json();
-          produtos = Object.entries(data || {}).map(([id, item]) => ({ id, ...item }));
+          produtos = Object.entries(data || {})
+            .map(([id, item]) => ({ id, ...item }))
+            .filter(item => item.ativo !== false && item.ativo !== 'false');
+          
+          produtos.sort((a, b) => {
+            const nomeA = (a.nome || '').trim().toLowerCase();
+            const nomeB = (b.nome || '').trim().toLowerCase();
+            return nomeA.localeCompare(nomeB, 'pt-BR');
+          });
+
           render(produtos);
         } catch (err) {
           listaEl.innerHTML = `<div class="empty">Não foi possível carregar os produtos.<br><small>${err.message}</small></div>`;
