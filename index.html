@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -360,4 +359,24 @@
   </script>
 </body>
 
+      // Detectar Plataforma
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      const btnIos = document.getElementById('btn-ios');
+      const btnAndroid = document.getElementById('btn-android');
+      
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        btnIos.style.display = "inline-block";
+      } else if (/android/i.test(userAgent)) {
+        btnAndroid.style.display = "inline-block";
+      } else {
+        btnIos.style.display = "inline-block";
+        btnAndroid.style.display = "inline-block";
+        btnIos.textContent = "iOS";
+        btnAndroid.textContent = "Android";
+      }
+
+      await carregar();
+    })();
+  </script>
+</body>
 </html>
