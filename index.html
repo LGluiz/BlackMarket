@@ -324,8 +324,9 @@
       }
 
       buscaEl.addEventListener('input', () => {
-        const term = buscaEl.value.toLowerCase();
-        render(produtos.filter(p => (p.nome || '').toLowerCase().includes(term)));
+        const removeAccents = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const term = removeAccents(buscaEl.value).toLowerCase();
+        render(produtos.filter(p => removeAccents(p.nome).toLowerCase().includes(term)));
       });
 
       await carregar();
