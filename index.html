@@ -282,7 +282,7 @@
           produtos = Object.entries(data || {})
             .map(([id, item]) => ({ id, ...item }))
             .filter(item => item.ativo !== false && item.ativo !== 'false');
-          
+
           produtos.sort((a, b) => {
             const nomeA = (a.nome || '').trim().toLowerCase();
             const nomeB = (b.nome || '').trim().toLowerCase();
